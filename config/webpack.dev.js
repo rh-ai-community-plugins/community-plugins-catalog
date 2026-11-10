@@ -11,9 +11,9 @@ module.exports = merge(common, {
     hot: true,
     proxy: [
       {
-        context: ['/community-plugins-admin/api'], // [PLUGIN-SPECIFIC] BFF proxy — must come before the general proxy
+        context: ['/community-plugins-catalog/api'], // [PLUGIN-SPECIFIC] BFF proxy — must come before the general proxy
         target: 'http://localhost:3000',
-        pathRewrite: { '^/community-plugins-admin/api': '/api' },
+        pathRewrite: { '^/community-plugins-catalog/api': '/api' },
       },
       {
         context: ['/api/k8s'], // K8s API pass-through — dashboard proxies /api/k8s to the cluster
@@ -21,9 +21,9 @@ module.exports = merge(common, {
         secure: false,
       },
       {
-        context: ['/community-plugins-admin'], // [PLUGIN-SPECIFIC] must match route prefix
+        context: ['/community-plugins-catalog'], // [PLUGIN-SPECIFIC] must match route prefix
         target: 'http://localhost:8443',
-        pathRewrite: { '^/community-plugins-admin': '/community-plugins-admin' },
+        pathRewrite: { '^/community-plugins-catalog': '/community-plugins-catalog' },
       },
     ],
   },

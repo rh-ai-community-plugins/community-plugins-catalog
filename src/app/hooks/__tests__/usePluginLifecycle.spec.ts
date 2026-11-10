@@ -27,7 +27,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin/install',
+      '/community-plugins-catalog/api/plugins/my-plugin/install',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ namespace: 'my-ns', values: undefined }),
@@ -72,7 +72,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin/upgrade',
+      '/community-plugins-catalog/api/plugins/my-plugin/upgrade',
       expect.objectContaining({ method: 'POST' }),
     );
   });
@@ -87,7 +87,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin',
+      '/community-plugins-catalog/api/plugins/my-plugin',
       expect.objectContaining({ method: 'DELETE' }),
     );
   });
@@ -102,7 +102,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin?deleteNamespace=true',
+      '/community-plugins-catalog/api/plugins/my-plugin?deleteNamespace=true',
       expect.objectContaining({ method: 'DELETE' }),
     );
   });
@@ -117,7 +117,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin/enable',
+      '/community-plugins-catalog/api/plugins/my-plugin/enable',
       expect.objectContaining({ method: 'POST' }),
     );
   });
@@ -132,7 +132,7 @@ describe('usePluginLifecycle', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/plugins/my-plugin/disable',
+      '/community-plugins-catalog/api/plugins/my-plugin/disable',
       expect.objectContaining({ method: 'POST' }),
     );
   });

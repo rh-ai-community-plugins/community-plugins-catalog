@@ -19,20 +19,20 @@ const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurre
 
 const mockPlugins: InstalledPlugin[] = [
   {
-    name: 'community-plugins-admin',
-    mfName: 'communityPluginsAdmin',
+    name: 'community-plugins-catalog',
+    mfName: 'communityPluginsCatalog',
     enabled: true,
     healthStatus: 'running',
     availableReplicas: 1,
     desiredReplicas: 1,
     catalogPlugin: {
-      name: 'community-plugins-admin',
-      repo: 'https://github.com/org/community-plugins-admin',
+      name: 'community-plugins-catalog',
+      repo: 'https://github.com/org/community-plugins-catalog',
       status: 'stable',
       maintenance: 'red-hat',
       lastUpdated: '2026-01-01',
       metadataAvailable: true,
-      displayName: 'Community Plugins Admin',
+      displayName: 'Community Plugins Catalog',
       description: 'Admin plugin for managing community plugins',
       version: '1.0.0',
     },
@@ -116,7 +116,7 @@ describe('InstalledPage', () => {
 
   it('renders all installed plugins in the table', () => {
     render(<InstalledPage />);
-    expect(screen.getByText('Community Plugins Admin')).toBeInTheDocument();
+    expect(screen.getByText('Community Plugins Catalog')).toBeInTheDocument();
     expect(screen.getByText('Brewet')).toBeInTheDocument();
     expect(screen.getByText('unknown-plugin')).toBeInTheDocument();
   });
@@ -244,7 +244,7 @@ describe('InstalledPage', () => {
     fireEvent.change(searchInput, { target: { value: 'Brewet' } });
 
     expect(screen.getByText('Brewet')).toBeInTheDocument();
-    expect(screen.queryByText('Community Plugins Admin')).not.toBeInTheDocument();
+    expect(screen.queryByText('Community Plugins Catalog')).not.toBeInTheDocument();
   });
 
   it('filters plugins by search text matching description', () => {
@@ -253,7 +253,7 @@ describe('InstalledPage', () => {
     fireEvent.change(searchInput, { target: { value: 'storage' } });
 
     expect(screen.getByText('Brewet')).toBeInTheDocument();
-    expect(screen.queryByText('Community Plugins Admin')).not.toBeInTheDocument();
+    expect(screen.queryByText('Community Plugins Catalog')).not.toBeInTheDocument();
   });
 
   it('shows refresh button that calls refetch', () => {
@@ -301,7 +301,7 @@ describe('InstalledPage', () => {
       catalogError: 'Catalog fetch failed',
     });
     render(<InstalledPage />);
-    expect(screen.getByText('Community Plugins Admin')).toBeInTheDocument();
+    expect(screen.getByText('Community Plugins Catalog')).toBeInTheDocument();
     expect(screen.getByText('Brewet')).toBeInTheDocument();
   });
 
@@ -316,7 +316,7 @@ describe('InstalledPage', () => {
       healthLoading: true,
     });
     render(<InstalledPage />);
-    expect(screen.getByLabelText('Checking community-plugins-admin status')).toBeInTheDocument();
+    expect(screen.getByLabelText('Checking community-plugins-catalog status')).toBeInTheDocument();
     expect(screen.getByLabelText('Checking brewet status')).toBeInTheDocument();
   });
 
@@ -346,8 +346,8 @@ describe('InstalledPage', () => {
 
   it('opens plugin detail modal when row is clicked', () => {
     render(<InstalledPage />);
-    const row = screen.getByText('Community Plugins Admin').closest('tr');
+    const row = screen.getByText('Community Plugins Catalog').closest('tr');
     fireEvent.click(row!);
-    expect(screen.getByTestId('plugin-detail-modal')).toHaveTextContent('community-plugins-admin');
+    expect(screen.getByTestId('plugin-detail-modal')).toHaveTextContent('community-plugins-catalog');
   });
 });

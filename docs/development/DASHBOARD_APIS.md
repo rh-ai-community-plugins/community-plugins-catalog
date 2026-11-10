@@ -39,7 +39,7 @@ Deploy your own backend service alongside the plugin. The dashboard proxies requ
 - You need to keep API keys or credentials server-side
 - You need server-side business logic or heavy data processing
 
-**Example:** The frontend calls `fetch('/community-plugins-admin/api/health')`. The dashboard matches the path against the `proxyService` configuration, rewrites it to `/api/health`, and forwards the request to your BFF service with the user's Bearer token. Your BFF can then use the token to make K8s API calls as the user.
+**Example:** The frontend calls `fetch('/community-plugins-catalog/api/health')`. The dashboard matches the path against the `proxyService` configuration, rewrites it to `/api/health`, and forwards the request to your BFF service with the user's Bearer token. Your BFF can then use the token to make K8s API calls as the user.
 
 See [section 1.3](#13-using-your-own-backend-bff-pattern) below and the full [BFF Pattern guide](../architecture/BFF_PATTERN.md) for setup details, token flow, and deployment configuration.
 

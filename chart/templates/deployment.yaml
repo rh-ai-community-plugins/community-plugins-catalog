@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "community-plugins-admin.fullname" . }}
-  namespace: {{ include "community-plugins-admin.namespace" . }}
+  name: {{ include "community-plugins-catalog.fullname" . }}
+  namespace: {{ include "community-plugins-catalog.namespace" . }}
   labels:
-    {{- include "community-plugins-admin.labels" . | nindent 4 }}
+    {{- include "community-plugins-catalog.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "community-plugins-admin.selectorLabels" . | nindent 6 }}
+      {{- include "community-plugins-catalog.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: frontend
   template:
     metadata:
       labels:
-        {{- include "community-plugins-admin.selectorLabels" . | nindent 8 }}
+        {{- include "community-plugins-catalog.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: frontend
     spec:
-      serviceAccountName: {{ include "community-plugins-admin.serviceAccountName" . }}
+      serviceAccountName: {{ include "community-plugins-catalog.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
-        - name: {{ include "community-plugins-admin.name" . }}
+        - name: {{ include "community-plugins-catalog.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:

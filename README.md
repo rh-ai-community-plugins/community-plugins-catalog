@@ -1,10 +1,10 @@
-# Community Plugins Admin
+# Community Plugins Catalog
 
 A community plugin for the **Red Hat OpenShift AI (RHOAI) Dashboard** that lets administrators discover, install, upgrade, remove, enable, and disable community plugins — directly from the dashboard UI.
 
 ## Overview
 
-Community Plugins Admin is designed to be the **first plugin** installed on an RHOAI dashboard. Once in place, it provides a self-service interface for managing all other community plugins without manual `MODULE_FEDERATION_CONFIG` edits or Helm operations.
+Community Plugins Catalog is designed to be the **first plugin** installed on an RHOAI dashboard. Once in place, it provides a self-service interface for managing all other community plugins without manual `MODULE_FEDERATION_CONFIG` edits or Helm operations.
 
 ### What It Does
 
@@ -48,21 +48,21 @@ The BFF runs with a dedicated ServiceAccount that has cluster-level RBAC permiss
 Install directly from the OCI registry — no need to clone this repo:
 
 ```bash
-helm install community-plugins-admin oci://quay.io/rh-ai-community-plugins/community-plugins-admin-chart \
-  --version 0.1.5 \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog oci://quay.io/rh-ai-community-plugins/community-plugins-catalog-chart \
+  --version 0.1.6 \
+  --namespace cp-plugins-catalog \
   --create-namespace
 ```
 
 Or, if you have a local checkout of the repository:
 
 ```bash
-helm install community-plugins-admin chart/ \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog chart/ \
+  --namespace cp-plugins-catalog \
   --create-namespace
 ```
 
-This creates a Deployment and Service for both the frontend (`community-plugins-admin`, serving `remoteEntry.js` via Nginx) and the BFF (`community-plugins-admin-bff`, Node.js backend on port 3000). To deploy the frontend only, add `--set bff.enabled=false`.
+This creates a Deployment and Service for both the frontend (`community-plugins-catalog`, serving `remoteEntry.js` via Nginx) and the BFF (`community-plugins-catalog-bff`, Node.js backend on port 3000). To deploy the frontend only, add `--set bff.enabled=false`.
 
 #### 2. Register with the RHOAI Dashboard
 
@@ -76,25 +76,25 @@ oc get configmap federation-config \
 import json, sys
 config = json.load(sys.stdin)
 config.append({
-  'name': 'communityPluginsAdmin',
+  'name': 'communityPluginsCatalog',
   'backend': {
     'remoteEntry': '/remoteEntry.js',
     'authorize': False,
     'tls': False,
     'service': {
-      'name': 'community-plugins-admin',
-      'namespace': 'cp-plugins-admin',
+      'name': 'community-plugins-catalog',
+      'namespace': 'cp-plugins-catalog',
       'port': 8080
     }
   },
   'proxyService': [{
-    'path': '/community-plugins-admin/api',
+    'path': '/community-plugins-catalog/api',
     'pathRewrite': '/api',
     'authorize': True,
     'tls': False,
     'service': {
-      'name': 'community-plugins-admin-bff',
-      'namespace': 'cp-plugins-admin',
+      'name': 'community-plugins-catalog-bff',
+      'namespace': 'cp-plugins-catalog',
       'port': 3000
     }
   }]
@@ -120,7 +120,7 @@ oc set env deployment/rhods-dashboard -n redhat-ods-applications --list \
   | python3 -c "import json,sys; d=json.loads(sys.stdin.read().split('=',1)[1].strip()); print('\n'.join(e['name'] for e in d))"
 ```
 
-You should see `communityPluginsAdmin` in the list of registered plugins.
+You should see `communityPluginsCatalog` in the list of registered plugins.
 
 To deploy your own plugin image instead, see [Build & Push](docs/development/BUILD_AND_PUSH.md). For the full deployment guide with Helm chart customization and BFF registration, see [Deploying on OpenShift](docs/deployment/OPENSHIFT_DEPLOY.md).
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is `community-plugins-admin`, a community plugin for the **Red Hat OpenShift AI (RHOAI) Dashboard** that lets administrators discover, install, upgrade, remove, enable, and disable community plugins from the dashboard UI. It is intended to be the first plugin installed on a dashboard, bootstrapping the community plugin ecosystem. Non-admin users can browse the catalog and see installed plugins but cannot modify them. The plugin reads the community plugin registry from the [rh-ai-community-plugins/charter](https://github.com/rh-ai-community-plugins/charter) repo (`plugins.yaml`) and aggregates metadata from each plugin's own `plugin.yaml`. It uses Webpack 5 Module Federation to expose remote modules that the RHOAI dashboard host application loads at runtime.
+This is `community-plugins-catalog`, a community plugin for the **Red Hat OpenShift AI (RHOAI) Dashboard** that lets administrators discover, install, upgrade, remove, enable, and disable community plugins from the dashboard UI. It is intended to be the first plugin installed on a dashboard, bootstrapping the community plugin ecosystem. Non-admin users can browse the catalog and see installed plugins but cannot modify them. The plugin reads the community plugin registry from the [rh-ai-community-plugins/charter](https://github.com/rh-ai-community-plugins/charter) repo (`plugins.yaml`) and aggregates metadata from each plugin's own `plugin.yaml`. It uses Webpack 5 Module Federation to expose remote modules that the RHOAI dashboard host application loads at runtime.
 
 ## Branching Strategy
 
@@ -65,17 +65,17 @@ npm run lint          # ESLint on bff/src/
 The plugin exposes two remote modules to the RHOAI dashboard host via Webpack Module Federation (configured inline in `config/webpack.common.js`):
 
 - **`./extensions`** (`src/rhoai/extensions.ts`) — Defines six extension points:
-  - `app.area` — registers the `community-plugins-admin` feature area
-  - `app.navigation/section` (x2) — `community-plugins` shared parent section (with `CommunityNavIcon`) and `community-plugins-admin` plugin subsection (with `CommunityPluginsAdminNavIcon`)
-  - `app.navigation/href` (x2) — "Catalog" and "Installed" nav items under the `community-plugins-admin` section
-  - `app.route` — mounts the App component with wildcard routing at `/community-plugins-admin/*`
-- **`./Icon`** (`src/app/components/CommunityPluginsAdminNavIcon.tsx`) — SVG icon for the plugin's nav subsection. A separate `CommunityNavIcon.tsx` provides the icon for the shared `community-plugins` parent section.
+  - `app.area` — registers the `community-plugins-catalog` feature area
+  - `app.navigation/section` (x2) — `community-plugins` shared parent section (with `CommunityNavIcon`) and `community-plugins-catalog` plugin subsection (with `CommunityPluginsCatalogNavIcon`)
+  - `app.navigation/href` (x2) — "Catalog" and "Installed" nav items under the `community-plugins-catalog` section
+  - `app.route` — mounts the App component with wildcard routing at `/community-plugins-catalog/*`
+- **`./Icon`** (`src/app/components/CommunityPluginsCatalogNavIcon.tsx`) — SVG icon for the plugin's nav subsection. A separate `CommunityNavIcon.tsx` provides the icon for the shared `community-plugins` parent section.
 
 Shared singletons (react, react-dom, react-router-dom, @patternfly/react-core, @openshift/dynamic-plugin-sdk) are provided by the host and not bundled into the plugin.
 
 ### Pages
 
-The plugin has two pages, routed under `/community-plugins-admin/*`:
+The plugin has two pages, routed under `/community-plugins-catalog/*`:
 
 - **Catalog page** (`src/app/pages/CatalogPage.tsx`) — Browse available community plugins from the charter registry. Displays a PatternFly card grid with search, filtering (status, maintenance tier, install state), and version comparison for installed plugins.
 - **Installed page** (`src/app/pages/InstalledPage.tsx`) — View and manage installed community plugins. Shows a table with health status, version, maintenance tier, and admin actions (upgrade, disable, remove).
@@ -85,7 +85,7 @@ A `PluginDetailModal` (`src/app/components/PluginDetailModal.tsx`) opens from ei
 ### Components
 
 - **`CommunityBanner.tsx`** — [SHARED] Orange banner identifying community plugin pages. Must not be removed.
-- **`CommunityPluginsAdminNavIcon.tsx`** — SVG icon for the plugin's sidebar nav entry.
+- **`CommunityPluginsCatalogNavIcon.tsx`** — SVG icon for the plugin's sidebar nav entry.
 - **`PluginDetailModal.tsx`** — Full plugin detail overlay with metadata sections, action buttons (admin-only), and lifecycle integration.
 - **`ConfirmRemoveModal.tsx`** — Confirmation dialog requiring the user to type the plugin name before removal.
 - **`LifecycleProgressModal.tsx`** — Step-by-step progress display for install/upgrade/remove operations using PatternFly `ProgressStepper`.
@@ -124,7 +124,7 @@ Twelve hooks in `src/app/hooks/` provide data fetching, state management, and AP
 
 ### BFF Service
 
-The `bff/` directory contains a standalone Express.js + TypeScript backend service that implements the BFF pattern. The dashboard proxies requests from `/community-plugins-admin/api/*` to this service, forwarding the user's Bearer token. See `docs/architecture/BFF_PATTERN.md` for details.
+The `bff/` directory contains a standalone Express.js + TypeScript backend service that implements the BFF pattern. The dashboard proxies requests from `/community-plugins-catalog/api/*` to this service, forwarding the user's Bearer token. See `docs/architecture/BFF_PATTERN.md` for details.
 
 The BFF app is defined in `bff/src/app.ts` (Express middleware and routes) and started in `bff/src/server.ts` (listen + K8s config logging). This split allows tests to import the app without starting a persistent server.
 
@@ -171,7 +171,7 @@ All lifecycle endpoints require a Bearer token (forwarded from the dashboard) an
 ### Webpack Configs
 
 - `config/webpack.common.js` — Shared config: entry point, loaders, Module Federation, path alias `~` → `./src`
-- `config/webpack.dev.js` — Dev server on port 9500, proxies `/community-plugins-admin/api` to BFF at `localhost:3000` and `/community-plugins-admin` to dashboard at `localhost:8443`
+- `config/webpack.dev.js` — Dev server on port 9500, proxies `/community-plugins-catalog/api` to BFF at `localhost:3000` and `/community-plugins-catalog` to dashboard at `localhost:8443`
 - `config/webpack.prod.js` — Output to `dist/`, source maps, chunk splitting disabled
 
 ### Test Setup

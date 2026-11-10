@@ -31,3 +31,6 @@ Thumbs.db
 # Claude Code (tracked: .claude/skills/)
 .claude/settings.local.json
 .claude/worktrees/
+
+# Oh my Pi
+.omp/profiles

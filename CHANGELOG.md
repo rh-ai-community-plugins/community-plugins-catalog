@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Installed-state detection for renamed plugins** — the Catalog card, install-state filter, plugin detail modal, and Installed page now match a plugin's installed state by its declared Module Federation scope (`remote.spec.name`) as well as its registry name. A plugin whose registry entry drifts from its MF scope (e.g. repo renamed after release) no longer shows a false **Disabled** badge, offers an Enable that always fails, or loses its catalog metadata on the Installed page.
 
-## [Unreleased]
+## [0.1.6] - Unreleased
 
 ### Changed
 
 - **CI pipeline** — `.github/workflows/ci.yml` now gates test execution by changed paths: PRs and pushes touching only docs, `plugin.yaml`, or the chart run linting only. On push to `dev`, tests are skipped when the merged PR's own CI run was green at its head SHA; direct pushes and red/missing PR runs always run tests. After green tests on push with code changes, both container images are built and pushed to Quay.io tagged `<package.json version>-<first 4 of SHA>` (e.g. `0.1.4-87c0`) plus the plain version tag. The workflow is manually triggerable via `workflow_dispatch` (full pipeline). `.github/workflows/build-push.yml` is removed — its manual-release role is covered by dispatching `ci.yml`.
+- **Project renamed to Community Plugins Catalog** — the plugin identity is now `community-plugins-catalog` (Module Federation scope `communityPluginsCatalog`, URL prefix `/community-plugins-catalog`, images `community-plugins-catalog[-bff]`, Helm chart `community-plugins-catalog-chart`, default namespace `cp-plugins-catalog`). See the migration guide in `docs/deployment/OPENSHIFT_DEPLOY.md` before upgrading an existing installation.
 
 ## [0.1.4] - 2026-08-10
 

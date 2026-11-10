@@ -46,7 +46,7 @@ podman run --rm --network=host \
   -e OC_PROJECT=redhat-ods-applications \
   -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
   -e MODULE_FEDERATION_CONFIG='[{
-    "name": "communityPluginsAdmin",
+    "name": "communityPluginsCatalog",
     "backend": {
       "remoteEntry": "/remoteEntry.js",
       "tls": false,
@@ -54,7 +54,7 @@ podman run --rm --network=host \
       "service": { "name": "placeholder", "namespace": "opendatahub", "port": 8080 }
     },
     "proxyService": [{
-      "path": "/community-plugins-admin/api",
+      "path": "/community-plugins-catalog/api",
       "pathRewrite": "/api",
       "authorize": true,
       "tls": false,
@@ -97,7 +97,7 @@ You should see `BFF listening on port 3000`. The `K8S_API_BASE` env var tells th
 >
 > In production, this is configurable via the Helm value `bff.charterRegistryUrl`.
 >
-> **Note:** The `proxyService` entry in the `MODULE_FEDERATION_CONFIG` (Step 2) is what tells the dashboard to forward `/community-plugins-admin/api/*` requests to the BFF at `localhost:3000`. If you omit the `proxyService` block, those requests will hit the dashboard's SPA fallback and return HTML instead of JSON.
+> **Note:** The `proxyService` entry in the `MODULE_FEDERATION_CONFIG` (Step 2) is what tells the dashboard to forward `/community-plugins-catalog/api/*` requests to the BFF at `localhost:3000`. If you omit the `proxyService` block, those requests will hit the dashboard's SPA fallback and return HTML instead of JSON.
 
 ### Step 4: Start the plugin dev server
 
@@ -117,11 +117,11 @@ You should now have **three processes** running:
 | BFF service | 3000 | Plugin backend (catalog aggregation, lifecycle operations) |
 | Plugin dev server | 9500 | Plugin frontend (webpack dev server with HMR) |
 
-Open the dashboard URL in your browser. You should see the RHOAI Dashboard with your plugin loaded in the sidebar, with the Catalog and Installed pages under the Community Plugins Admin section.
+Open the dashboard URL in your browser. You should see the RHOAI Dashboard with your plugin loaded in the sidebar, with the Catalog and Installed pages under the Community Plugins Catalog section.
 
 ### How it works
 
-- The backend reads `MODULE_FEDERATION_CONFIG`, registers a proxy `/_mf/communityPluginsAdmin/*` that routes to `http://localhost:9500/*`.
+- The backend reads `MODULE_FEDERATION_CONFIG`, registers a proxy `/_mf/communityPluginsCatalog/*` that routes to `http://localhost:9500/*`.
 - The backend injects the plugin metadata into the HTML via `<script id="mf-remotes-json">`.
 - The frontend discovers and loads your plugin at runtime via `@module-federation/runtime`.
 - `--network=host` means the container's `localhost` is your host's `localhost`, so the proxy reaches your plugin dev server.
@@ -198,14 +198,14 @@ oc auth can-i create pods --all-namespaces   # Should return "yes" for cluster-a
 Edit `env.local` in the odh-dashboard root and add (or update) the `MODULE_FEDERATION_CONFIG` variable with your plugin's entry:
 
 ```bash
-MODULE_FEDERATION_CONFIG=[{"name":"communityPluginsAdmin","backend":{"remoteEntry":"/remoteEntry.js","tls":false,"localService":{"host":"localhost","port":9500},"service":{"name":"placeholder","namespace":"opendatahub","port":8080}},"proxyService":[{"path":"/community-plugins-admin/api","pathRewrite":"/api","authorize":true,"tls":false,"localService":{"host":"localhost","port":3000},"service":{"name":"placeholder","namespace":"opendatahub","port":3000}}]}]
+MODULE_FEDERATION_CONFIG=[{"name":"communityPluginsCatalog","backend":{"remoteEntry":"/remoteEntry.js","tls":false,"localService":{"host":"localhost","port":9500},"service":{"name":"placeholder","namespace":"opendatahub","port":8080}},"proxyService":[{"path":"/community-plugins-catalog/api","pathRewrite":"/api","authorize":true,"tls":false,"localService":{"host":"localhost","port":3000},"service":{"name":"placeholder","namespace":"opendatahub","port":3000}}]}]
 ```
 
 Or in readable JSON form, the entry looks like:
 
 ```json
 {
-  "name": "communityPluginsAdmin",
+  "name": "communityPluginsCatalog",
   "backend": {
     "remoteEntry": "/remoteEntry.js",
     "tls": false,
@@ -213,7 +213,7 @@ Or in readable JSON form, the entry looks like:
     "service": { "name": "placeholder", "namespace": "opendatahub", "port": 8080 }
   },
   "proxyService": [{
-    "path": "/community-plugins-admin/api",
+    "path": "/community-plugins-catalog/api",
     "pathRewrite": "/api",
     "authorize": true,
     "tls": false,
@@ -255,7 +255,7 @@ You should see `BFF listening on port 3000`. The `K8S_API_BASE` env var tells th
 >
 > **Tip:** To point the BFF at a private plugin catalog, set `CHARTER_REGISTRY_URL` (see [Step 3 in Method 1](#step-3-start-the-bff-service) for details).
 >
-> **Note:** The `proxyService` entry in `env.local` (Step 6) tells the dashboard to forward `/community-plugins-admin/api/*` requests to the BFF. Without it, those requests return HTML instead of JSON.
+> **Note:** The `proxyService` entry in `env.local` (Step 6) tells the dashboard to forward `/community-plugins-catalog/api/*` requests to the BFF. Without it, those requests return HTML instead of JSON.
 
 ### Step 9: Start the plugin dev server
 
@@ -292,7 +292,7 @@ If your plugin has its own backend service (BFF pattern), add a `proxyService` a
 
 | Field | Description |
 |---|---|
-| `proxyService[].path` | URL path prefix the dashboard intercepts (e.g. `/community-plugins-admin/api`). |
+| `proxyService[].path` | URL path prefix the dashboard intercepts (e.g. `/community-plugins-catalog/api`). |
 | `proxyService[].pathRewrite` | Replacement prefix forwarded to the BFF (e.g. `/api`). |
 | `proxyService[].authorize` | When `true`, the dashboard forwards the user's Bearer token as `Authorization` header. |
 | `proxyService[].tls` | Whether the BFF uses HTTPS. Set to `false` for local development. |
@@ -359,7 +359,7 @@ This project defaults to port **9500**. The port only matters if you run multipl
 
 ### BFF: HTML returned instead of JSON
 
-The frontend receives HTML instead of JSON. This means the request to `/community-plugins-admin/api/*` is not being proxied to the BFF and is hitting the SPA fallback instead.
+The frontend receives HTML instead of JSON. This means the request to `/community-plugins-catalog/api/*` is not being proxied to the BFF and is hitting the SPA fallback instead.
 
 - Ensure your `MODULE_FEDERATION_CONFIG` includes the `proxyService` block (see the config examples above)
 - Restart the dashboard after changing `MODULE_FEDERATION_CONFIG`

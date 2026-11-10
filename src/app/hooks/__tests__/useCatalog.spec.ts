@@ -46,7 +46,7 @@ describe('useCatalog', () => {
     expect(result.current.isRefetching).toBe(false);
     expect(result.current.error).toBeNull();
     expect(global.fetch).toHaveBeenCalledWith(
-      '/community-plugins-admin/api/catalog?refresh=true',
+      '/community-plugins-catalog/api/catalog?refresh=true',
       expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
   });
@@ -104,7 +104,7 @@ describe('useCatalog', () => {
 
     await waitFor(() =>
       expect(global.fetch).toHaveBeenCalledWith(
-        '/community-plugins-admin/api/catalog?refresh=true',
+        '/community-plugins-catalog/api/catalog?refresh=true',
         expect.objectContaining({ signal: expect.any(AbortSignal) }),
       ),
     );

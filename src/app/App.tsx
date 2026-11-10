@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component<React.PropsWithChildren, ErrorBounda
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error('Community Plugins Admin error:', error, errorInfo.componentStack);
+    console.error('Community Plugins Catalog error:', error, errorInfo.componentStack);
   }
 
   render() {
@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component<React.PropsWithChildren, ErrorBounda
             icon={ExclamationTriangleIcon}
           >
             <EmptyStateBody>
-              An unexpected error occurred in the Community Plugins Admin plugin.
+              An unexpected error occurred in the Community Plugins Catalog plugin.
             </EmptyStateBody>
             <EmptyStateFooter>
               <EmptyStateActions>

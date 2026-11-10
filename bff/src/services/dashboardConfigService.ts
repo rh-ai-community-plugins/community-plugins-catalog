@@ -5,8 +5,8 @@ const DASHBOARD_NAMESPACE = process.env.DASHBOARD_NAMESPACE || 'redhat-ods-appli
 const DASHBOARD_DEPLOYMENT = process.env.DASHBOARD_DEPLOYMENT || 'rhods-dashboard';
 const MF_ENV_VAR = 'MODULE_FEDERATION_CONFIG';
 const MAX_CONCURRENCY_RETRIES = 3;
-const CM_REF_ANNOTATION = 'community-plugins-admin/configMapRef';
-const CM_REF_ANNOTATION_PATCH = 'community-plugins-admin~1configMapRef';
+const CM_REF_ANNOTATION = 'community-plugins-catalog/configMapRef';
+const CM_REF_ANNOTATION_PATCH = 'community-plugins-catalog~1configMapRef';
 
 export function scopeToKebab(scope: string): string {
   return scope.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase();

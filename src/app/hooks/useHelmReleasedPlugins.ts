@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-const API_BASE = '/community-plugins-admin/api/plugins';
+const API_BASE = '/community-plugins-catalog/api/plugins';
 
 interface HelmRelease {
   name: string;

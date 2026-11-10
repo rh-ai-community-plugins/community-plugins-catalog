@@ -1,7 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useHelmReleasedPlugins } from '../useHelmReleasedPlugins';
 
-const API_URL = '/community-plugins-admin/api/plugins';
+const API_URL = '/community-plugins-catalog/api/plugins';
 
 const mockReleases = [
   { name: 'plugin-alpha', namespace: 'plugin-alpha', status: 'deployed', app_version: '1.0.0' },

@@ -41,11 +41,11 @@ EOF
 }
 
 # Target configurations
-frontend_image_name="community-plugins-admin"
+frontend_image_name="community-plugins-catalog"
 frontend_containerfile="Containerfile"
 frontend_context="."
 
-bff_image_name="community-plugins-admin-bff"
+bff_image_name="community-plugins-catalog-bff"
 bff_containerfile="bff/Containerfile"
 bff_context="bff/"
 

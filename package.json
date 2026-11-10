@@ -1,19 +1,19 @@
 {
-  "name": "community-plugins-admin",
-  "version": "0.1.5",
+  "name": "community-plugins-catalog",
+  "version": "0.1.6",
   "description": "Discover, install, upgrade, and manage community plugins for the RHOAI Dashboard",
   "private": true,
   "_comment_name": "[PLUGIN-SPECIFIC] package name — change to {your-plugin}",
   "_comment_mf": "[PLUGIN-SPECIFIC] module-federation.name — camelCase, must match webpack and plugin.yaml",
   "module-federation": {
-    "name": "communityPluginsAdmin",
+    "name": "communityPluginsCatalog",
     "remoteEntry": "remoteEntry.js",
     "authorize": false,
     "tls": false,
     "proxy": [
       {
-        "path": "/community-plugins-admin",
-        "pathRewrite": "/community-plugins-admin"
+        "path": "/community-plugins-catalog",
+        "pathRewrite": "/community-plugins-catalog"
       }
     ],
     "_comment_proxy": "[PLUGIN-SPECIFIC] proxy path must match route prefix in extensions.ts",

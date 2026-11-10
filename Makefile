@@ -2,9 +2,9 @@
 
 # Container image settings
 REGISTRY       ?= quay.io/rh-ai-community-plugins
-FRONTEND_IMAGE ?= community-plugins-admin
-BFF_IMAGE      ?= community-plugins-admin-bff
-CHART_NAME     ?= community-plugins-admin-chart  # used by help display only; chart-package/chart-push use chart/ directly
+FRONTEND_IMAGE ?= community-plugins-catalog
+BFF_IMAGE      ?= community-plugins-catalog-bff
+CHART_NAME     ?= community-plugins-catalog-chart  # used by help display only; chart-package/chart-push use chart/ directly
 VERSION        ?=
 BUILDER        ?= podman
 IMAGE_TAG      ?= latest
