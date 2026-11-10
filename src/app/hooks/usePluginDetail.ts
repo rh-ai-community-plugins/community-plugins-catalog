@@ -30,7 +30,7 @@ export function usePluginDetail(
     setLoading(true);
     setError(null);
 
-    fetch(`/community-plugins-admin/api/catalog/${encodeURIComponent(pluginName)}`, {
+    fetch(`/community-plugins-catalog/api/catalog/${encodeURIComponent(pluginName)}`, {
       signal: controller.signal,
     })
       .then((res) => {

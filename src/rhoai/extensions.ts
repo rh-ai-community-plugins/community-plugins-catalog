@@ -13,62 +13,62 @@ export const communityPluginsSectionExtension = {
 
 // [PLUGIN-SPECIFIC] Everything below is specific to this plugin
 
-export const communityPluginsAdminAreaExtension = {
+export const communityPluginsCatalogAreaExtension = {
   type: 'app.area' as const,
   properties: {
-    id: 'community-plugins-admin', // [PLUGIN-SPECIFIC] unique area ID
+    id: 'community-plugins-catalog', // [PLUGIN-SPECIFIC] unique area ID
     featureFlags: [] as string[],
   },
 };
 
-export const communityPluginsAdminSectionExtension = {
+export const communityPluginsCatalogSectionExtension = {
   type: 'app.navigation/section' as const,
   properties: {
-    id: 'community-plugins-admin', // [PLUGIN-SPECIFIC] unique nav section ID
-    title: 'Community Plugins Admin', // [PLUGIN-SPECIFIC] display name in sidebar
-    group: '1_community_plugins_admin', // [PLUGIN-SPECIFIC] sort key within community-plugins
+    id: 'community-plugins-catalog', // [PLUGIN-SPECIFIC] unique nav section ID
+    title: 'Community Plugins Catalog', // [PLUGIN-SPECIFIC] display name in sidebar
+    group: '1_community_plugins_catalog', // [PLUGIN-SPECIFIC] sort key within community-plugins
     section: 'community-plugins', // [SHARED] must match communityPluginsSectionExtension.id — do not change
-    iconRef: () => import(/* webpackMode: "eager" */ '~/app/components/CommunityPluginsAdminNavIcon'),
+    iconRef: () => import(/* webpackMode: "eager" */ '~/app/components/CommunityPluginsCatalogNavIcon'),
   },
 };
 
 export const catalogNavExtension = {
   type: 'app.navigation/href' as const,
   properties: {
-    id: 'community-plugins-admin-catalog', // [PLUGIN-SPECIFIC] unique nav item ID
+    id: 'community-plugins-catalog-catalog', // [PLUGIN-SPECIFIC] unique nav item ID
     title: 'Catalog',
-    href: '/community-plugins-admin/catalog', // [PLUGIN-SPECIFIC] must match route prefix
-    section: 'community-plugins-admin', // [PLUGIN-SPECIFIC] references this plugin's section ID
-    path: '/community-plugins-admin/catalog/*', // [PLUGIN-SPECIFIC] route-matching pattern
+    href: '/community-plugins-catalog/catalog', // [PLUGIN-SPECIFIC] must match route prefix
+    section: 'community-plugins-catalog', // [PLUGIN-SPECIFIC] references this plugin's section ID
+    path: '/community-plugins-catalog/catalog/*', // [PLUGIN-SPECIFIC] route-matching pattern
   },
 };
 
 export const installedNavExtension = {
   type: 'app.navigation/href' as const,
   properties: {
-    id: 'community-plugins-admin-installed', // [PLUGIN-SPECIFIC] unique nav item ID
+    id: 'community-plugins-catalog-installed', // [PLUGIN-SPECIFIC] unique nav item ID
     title: 'Installed',
-    href: '/community-plugins-admin/installed', // [PLUGIN-SPECIFIC] must match route prefix
-    section: 'community-plugins-admin', // [PLUGIN-SPECIFIC] references this plugin's section ID
-    path: '/community-plugins-admin/installed/*', // [PLUGIN-SPECIFIC] route-matching pattern
+    href: '/community-plugins-catalog/installed', // [PLUGIN-SPECIFIC] must match route prefix
+    section: 'community-plugins-catalog', // [PLUGIN-SPECIFIC] references this plugin's section ID
+    path: '/community-plugins-catalog/installed/*', // [PLUGIN-SPECIFIC] route-matching pattern
   },
 };
 
-export const communityPluginsAdminRouteExtension = {
+export const communityPluginsCatalogRouteExtension = {
   type: 'app.route' as const,
   properties: {
-    path: '/community-plugins-admin/*', // [PLUGIN-SPECIFIC] top-level route prefix
+    path: '/community-plugins-catalog/*', // [PLUGIN-SPECIFIC] top-level route prefix
     component: () => import(/* webpackMode: "eager" */ '~/app/App'),
   },
 };
 
 export const extensions = [
   communityPluginsSectionExtension,
-  communityPluginsAdminAreaExtension,
-  communityPluginsAdminSectionExtension,
+  communityPluginsCatalogAreaExtension,
+  communityPluginsCatalogSectionExtension,
   catalogNavExtension,
   installedNavExtension,
-  communityPluginsAdminRouteExtension,
+  communityPluginsCatalogRouteExtension,
 ];
 
 export default extensions;

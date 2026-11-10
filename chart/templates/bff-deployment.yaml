@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "community-plugins-admin.fullname" . }}-bff
-  namespace: {{ include "community-plugins-admin.namespace" . }}
+  name: {{ include "community-plugins-catalog.fullname" . }}-bff
+  namespace: {{ include "community-plugins-catalog.namespace" . }}
   labels:
-    {{- include "community-plugins-admin.labels" . | nindent 4 }}
+    {{- include "community-plugins-catalog.labels" . | nindent 4 }}
     app.kubernetes.io/component: bff
 spec:
   replicas: {{ .Values.bff.replicaCount }}
   selector:
     matchLabels:
-      {{- include "community-plugins-admin.selectorLabels" . | nindent 6 }}
+      {{- include "community-plugins-catalog.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: bff
   template:
     metadata:
       labels:
-        {{- include "community-plugins-admin.selectorLabels" . | nindent 8 }}
+        {{- include "community-plugins-catalog.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: bff
     spec:
-      serviceAccountName: {{ include "community-plugins-admin.bffServiceAccountName" . }}
+      serviceAccountName: {{ include "community-plugins-catalog.bffServiceAccountName" . }}
       automountServiceAccountToken: false
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}

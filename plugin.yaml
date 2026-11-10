@@ -1,11 +1,11 @@
 # --- Plugin identity (required) ---
-name: community-plugins-admin                    # [PLUGIN-SPECIFIC] unique plugin identifier (kebab-case)
-displayName: Community Plugins Admin             # [PLUGIN-SPECIFIC] human-readable name
+name: community-plugins-catalog                    # [PLUGIN-SPECIFIC] unique plugin identifier (kebab-case)
+displayName: Community Plugins Catalog             # [PLUGIN-SPECIFIC] human-readable name
 description: >-
   Discover, install, upgrade, remove, enable, and disable community plugins
   for the RHOAI Dashboard. Browse the community plugin catalog, view detailed
   plugin metadata, and manage the full plugin lifecycle from the dashboard UI.
-version: 0.1.5
+version: 0.1.6
 
 # --- Maintainer (required) ---
 maintainer:                          # [PLUGIN-SPECIFIC]
@@ -21,40 +21,40 @@ rhoai_compatibility:                 # [PLUGIN-SPECIFIC]
 deployment_model: cluster-shared     # per-project | cluster-shared | both
 
 image:                               # [PLUGIN-SPECIFIC]
-  repository: quay.io/rh-ai-community-plugins/community-plugins-admin
-  tag: "0.1.5"
+  repository: quay.io/rh-ai-community-plugins/community-plugins-catalog
+  tag: "0.1.6"
 
 bff_image:                           # [PLUGIN-SPECIFIC] (optional — only if using BFF pattern)
-  repository: quay.io/rh-ai-community-plugins/community-plugins-admin-bff
-  tag: "0.1.5"
+  repository: quay.io/rh-ai-community-plugins/community-plugins-catalog-bff
+  tag: "0.1.6"
 
 # --- Installation (required) ---
 install:
   method: automatic                  # automatic | assisted | manual
-  namespace: cp-plugins-admin
+  namespace: cp-plugins-catalog
   helm:
     chart_path: chart/
-    registry: oci://quay.io/rh-ai-community-plugins/community-plugins-admin-chart  # [PLUGIN-SPECIFIC]
+    registry: oci://quay.io/rh-ai-community-plugins/community-plugins-catalog-chart  # [PLUGIN-SPECIFIC]
   prerequisites: []
-  instructions: https://github.com/rh-ai-community-plugins/community-plugins-admin/blob/main/docs/deployment  # [PLUGIN-SPECIFIC]
+  instructions: https://github.com/rh-ai-community-plugins/community-plugins-catalog/blob/main/docs/deployment  # [PLUGIN-SPECIFIC]
 
 # --- Dashboard integration (required) ---
 remote:
   type: module-federation
   spec:
-    name: communityPluginsAdmin                 # [PLUGIN-SPECIFIC] Module Federation container name (camelCase)
-    scope: communityPluginsAdmin                # [PLUGIN-SPECIFIC] must match name above
+    name: communityPluginsCatalog                 # [PLUGIN-SPECIFIC] Module Federation container name (camelCase)
+    scope: communityPluginsCatalog                # [PLUGIN-SPECIFIC] must match name above
     # [PLUGIN-SPECIFIC] Update this URL to point to your deployed OpenShift route.
     # The URL is cluster-specific and depends on the route created by the Helm chart or Ingress.
-    # Example: https://community-plugins-admin-mynamespace.apps.mycluster.example.com/remoteEntry.js
+    # Example: https://community-plugins-catalog-mynamespace.apps.mycluster.example.com/remoteEntry.js
     remoteEntry: https://<your-openshift-route>/remoteEntry.js  # [PLUGIN-SPECIFIC]
     paths:
       - type: route
-        path: /community-plugins-admin           # [PLUGIN-SPECIFIC] must match route prefix in extensions.ts
+        path: /community-plugins-catalog           # [PLUGIN-SPECIFIC] must match route prefix in extensions.ts
         extensions:
-          - communityPluginsAdmin/extensions     # [PLUGIN-SPECIFIC] {scope}/extensions
+          - communityPluginsCatalog/extensions     # [PLUGIN-SPECIFIC] {scope}/extensions
       - type: icon
-        path: communityPluginsAdmin/Icon         # [PLUGIN-SPECIFIC] {scope}/Icon
+        path: communityPluginsCatalog/Icon         # [PLUGIN-SPECIFIC] {scope}/Icon
 
 # --- RBAC (required) ---
 # The BFF ServiceAccount needs cluster-level permissions to manage plugin
@@ -71,6 +71,6 @@ rbac:
 
 # --- Support (optional) ---
 support:
-  repo: https://github.com/rh-ai-community-plugins/community-plugins-admin   # [PLUGIN-SPECIFIC]
-  docs: https://github.com/rh-ai-community-plugins/community-plugins-admin/tree/main/docs
-  issues: https://github.com/rh-ai-community-plugins/community-plugins-admin/issues
+  repo: https://github.com/rh-ai-community-plugins/community-plugins-catalog   # [PLUGIN-SPECIFIC]
+  docs: https://github.com/rh-ai-community-plugins/community-plugins-catalog/tree/main/docs
+  issues: https://github.com/rh-ai-community-plugins/community-plugins-catalog/issues

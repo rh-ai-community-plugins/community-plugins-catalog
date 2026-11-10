@@ -54,7 +54,7 @@ export function useInstalledPluginNames() {
     setLoading(true);
     setError(null);
 
-    fetch('/community-plugins-admin/api/config', { signal: controller.signal })
+    fetch('/community-plugins-catalog/api/config', { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch BFF config: ${res.status}`);
         return res.json();

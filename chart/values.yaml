@@ -1,18 +1,18 @@
-# Default values for community-plugins-admin.
+# Default values for community-plugins-catalog.
 # This is a YAML-formatted file.
 
 # -- Target namespace for all namespaced resources.
 # Override with --set namespace=<ns> to deploy elsewhere.
-namespace: cp-plugins-admin
+namespace: cp-plugins-catalog
 
 image:
-  repository: quay.io/rh-ai-community-plugins/community-plugins-admin
+  repository: quay.io/rh-ai-community-plugins/community-plugins-catalog
   tag: ""
   pullPolicy: IfNotPresent
 
 # Overrides .Chart.Name so deployed resources use the plugin name, not the
 # chart name (which has a -chart suffix to avoid OCI registry collisions).
-nameOverride: "community-plugins-admin"
+nameOverride: "community-plugins-catalog"
 fullnameOverride: ""
 
 serviceAccount:
@@ -34,7 +34,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /community-plugins-admin
+        - path: /community-plugins-catalog
           pathType: Prefix
   tls: []
 
@@ -59,7 +59,7 @@ affinity: {}
 bff:
   enabled: true
   image:
-    repository: quay.io/rh-ai-community-plugins/community-plugins-admin-bff
+    repository: quay.io/rh-ai-community-plugins/community-plugins-catalog-bff
     tag: ""
     pullPolicy: IfNotPresent
   replicaCount: 1

@@ -22,13 +22,13 @@ const mockUseHelmReleasedPlugins = useHelmReleasedPlugins as jest.MockedFunction
 
 const mockCatalogPlugins: CatalogPlugin[] = [
   {
-    name: 'community-plugins-admin',
-    repo: 'https://github.com/org/community-plugins-admin',
+    name: 'community-plugins-catalog',
+    repo: 'https://github.com/org/community-plugins-catalog',
     status: 'stable',
     maintenance: 'red-hat',
     lastUpdated: '2026-01-01',
     metadataAvailable: true,
-    displayName: 'Community Plugins Admin',
+    displayName: 'Community Plugins Catalog',
     description: 'Admin plugin',
     version: '1.0.0',
   },
@@ -46,14 +46,14 @@ const mockCatalogPlugins: CatalogPlugin[] = [
 ];
 
 const defaultInstalledReturn = {
-  installedNames: new Set(['community-plugins-admin', 'brewet']),
+  installedNames: new Set(['community-plugins-catalog', 'brewet']),
   entries: [
     {
-      name: 'communityPluginsAdmin',
+      name: 'communityPluginsCatalog',
       backend: {
         remoteEntry: '/remoteEntry.js',
         tls: false,
-        service: { name: 'community-plugins-admin', namespace: 'redhat-ods-applications', port: 8080 },
+        service: { name: 'community-plugins-catalog', namespace: 'redhat-ods-applications', port: 8080 },
       },
     },
     {
@@ -134,9 +134,9 @@ describe('extractServiceInfo', () => {
 });
 
 const defaultHelmReturn = {
-  helmInstalledNames: new Set<string>(['community-plugins-admin', 'brewet']),
+  helmInstalledNames: new Set<string>(['community-plugins-catalog', 'brewet']),
   helmVersionMap: new Map<string, string>([
-    ['community-plugins-admin', '1.0.0'],
+    ['community-plugins-catalog', '1.0.0'],
     ['brewet', '0.5.0'],
   ]),
   loading: false,
@@ -178,9 +178,9 @@ describe('useInstalledPlugins', () => {
 
     expect(result.current.plugins).toHaveLength(2);
 
-    const adminPlugin = result.current.plugins.find((p) => p.name === 'community-plugins-admin');
+    const adminPlugin = result.current.plugins.find((p) => p.name === 'community-plugins-catalog');
     expect(adminPlugin).toBeDefined();
-    expect(adminPlugin!.catalogPlugin?.displayName).toBe('Community Plugins Admin');
+    expect(adminPlugin!.catalogPlugin?.displayName).toBe('Community Plugins Catalog');
     expect(adminPlugin!.catalogPlugin?.version).toBe('1.0.0');
     expect(adminPlugin!.enabled).toBe(true);
 
@@ -202,7 +202,7 @@ describe('useInstalledPlugins', () => {
 
     expect(result.current.plugins).toHaveLength(2);
     expect(result.current.plugins[0].catalogPlugin).toBeUndefined();
-    expect(result.current.plugins[0].name).toBe('community-plugins-admin');
+    expect(result.current.plugins[0].name).toBe('community-plugins-catalog');
   });
 
   it('resolves running health status from deployment', async () => {

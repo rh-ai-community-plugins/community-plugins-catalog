@@ -56,11 +56,11 @@ module.exports = {
       template: path.resolve(__dirname, '../src/index.html'),
     }),
     new ModuleFederationPlugin({
-      name: "communityPluginsAdmin", // [PLUGIN-SPECIFIC] must match package.json and plugin.yaml
+      name: "communityPluginsCatalog", // [PLUGIN-SPECIFIC] must match package.json and plugin.yaml
       filename: remoteEntry,
       exposes: {
         './extensions': './src/rhoai/extensions.ts',
-        './Icon': './src/app/components/CommunityPluginsAdminNavIcon.tsx',
+        './Icon': './src/app/components/CommunityPluginsCatalogNavIcon.tsx',
       },
       shared: {
         react: {

@@ -17,8 +17,8 @@ permissions:
 
 env:
   IMAGE_REGISTRY: quay.io/rh-ai-community-plugins
-  FRONTEND_IMAGE: community-plugins-admin
-  BFF_IMAGE: community-plugins-admin-bff
+  FRONTEND_IMAGE: community-plugins-catalog
+  BFF_IMAGE: community-plugins-catalog-bff
 
 jobs:
   # ---------------------------------------------------------------------------

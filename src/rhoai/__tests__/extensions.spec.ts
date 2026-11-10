@@ -1,22 +1,22 @@
 import {
-  communityPluginsAdminAreaExtension,
+  communityPluginsCatalogAreaExtension,
   communityPluginsSectionExtension,
-  communityPluginsAdminSectionExtension,
+  communityPluginsCatalogSectionExtension,
   catalogNavExtension,
   installedNavExtension,
-  communityPluginsAdminRouteExtension,
+  communityPluginsCatalogRouteExtension,
   extensions,
 } from '../extensions';
 
 describe('RHOAI Plugin Extensions', () => {
-  describe('communityPluginsAdminAreaExtension', () => {
+  describe('communityPluginsCatalogAreaExtension', () => {
     it('should have the correct type and id', () => {
-      expect(communityPluginsAdminAreaExtension.type).toBe('app.area');
-      expect(communityPluginsAdminAreaExtension.properties.id).toBe('community-plugins-admin');
+      expect(communityPluginsCatalogAreaExtension.type).toBe('app.area');
+      expect(communityPluginsCatalogAreaExtension.properties.id).toBe('community-plugins-catalog');
     });
 
     it('should have an empty featureFlags array', () => {
-      expect(communityPluginsAdminAreaExtension.properties.featureFlags).toEqual([]);
+      expect(communityPluginsCatalogAreaExtension.properties.featureFlags).toEqual([]);
     });
   });
 
@@ -33,43 +33,43 @@ describe('RHOAI Plugin Extensions', () => {
     });
   });
 
-  describe('communityPluginsAdminSectionExtension', () => {
+  describe('communityPluginsCatalogSectionExtension', () => {
     it('should define a subsection nested under community-plugins', () => {
-      expect(communityPluginsAdminSectionExtension.type).toBe('app.navigation/section');
-      expect(communityPluginsAdminSectionExtension.properties.id).toBe('community-plugins-admin');
-      expect(communityPluginsAdminSectionExtension.properties.title).toBe('Community Plugins Admin');
-      expect(communityPluginsAdminSectionExtension.properties.group).toBe('1_community_plugins_admin');
-      expect(communityPluginsAdminSectionExtension.properties.section).toBe('community-plugins');
-      expect(typeof communityPluginsAdminSectionExtension.properties.iconRef).toBe('function');
+      expect(communityPluginsCatalogSectionExtension.type).toBe('app.navigation/section');
+      expect(communityPluginsCatalogSectionExtension.properties.id).toBe('community-plugins-catalog');
+      expect(communityPluginsCatalogSectionExtension.properties.title).toBe('Community Plugins Catalog');
+      expect(communityPluginsCatalogSectionExtension.properties.group).toBe('1_community_plugins_catalog');
+      expect(communityPluginsCatalogSectionExtension.properties.section).toBe('community-plugins');
+      expect(typeof communityPluginsCatalogSectionExtension.properties.iconRef).toBe('function');
     });
   });
 
   describe('navigation extensions', () => {
-    it('should define Catalog nav item under community-plugins-admin section', () => {
+    it('should define Catalog nav item under community-plugins-catalog section', () => {
       expect(catalogNavExtension.type).toBe('app.navigation/href');
-      expect(catalogNavExtension.properties.id).toBe('community-plugins-admin-catalog');
+      expect(catalogNavExtension.properties.id).toBe('community-plugins-catalog-catalog');
       expect(catalogNavExtension.properties.title).toBe('Catalog');
-      expect(catalogNavExtension.properties.href).toBe('/community-plugins-admin/catalog');
-      expect(catalogNavExtension.properties.section).toBe('community-plugins-admin');
-      expect(catalogNavExtension.properties.path).toBe('/community-plugins-admin/catalog/*');
+      expect(catalogNavExtension.properties.href).toBe('/community-plugins-catalog/catalog');
+      expect(catalogNavExtension.properties.section).toBe('community-plugins-catalog');
+      expect(catalogNavExtension.properties.path).toBe('/community-plugins-catalog/catalog/*');
     });
 
-    it('should define Installed nav item under community-plugins-admin section', () => {
+    it('should define Installed nav item under community-plugins-catalog section', () => {
       expect(installedNavExtension.type).toBe('app.navigation/href');
-      expect(installedNavExtension.properties.id).toBe('community-plugins-admin-installed');
+      expect(installedNavExtension.properties.id).toBe('community-plugins-catalog-installed');
       expect(installedNavExtension.properties.title).toBe('Installed');
-      expect(installedNavExtension.properties.href).toBe('/community-plugins-admin/installed');
-      expect(installedNavExtension.properties.section).toBe('community-plugins-admin');
-      expect(installedNavExtension.properties.path).toBe('/community-plugins-admin/installed/*');
+      expect(installedNavExtension.properties.href).toBe('/community-plugins-catalog/installed');
+      expect(installedNavExtension.properties.section).toBe('community-plugins-catalog');
+      expect(installedNavExtension.properties.path).toBe('/community-plugins-catalog/installed/*');
     });
   });
 
   describe('route extension', () => {
     it('should define a single wildcard route with lazy component', () => {
-      expect(communityPluginsAdminRouteExtension.type).toBe('app.route');
-      expect(communityPluginsAdminRouteExtension.properties.path).toBe('/community-plugins-admin/*');
-      expect(typeof communityPluginsAdminRouteExtension.properties.component).toBe('function');
-      expect(communityPluginsAdminRouteExtension.properties.component()).toBeInstanceOf(Promise);
+      expect(communityPluginsCatalogRouteExtension.type).toBe('app.route');
+      expect(communityPluginsCatalogRouteExtension.properties.path).toBe('/community-plugins-catalog/*');
+      expect(typeof communityPluginsCatalogRouteExtension.properties.component).toBe('function');
+      expect(communityPluginsCatalogRouteExtension.properties.component()).toBeInstanceOf(Promise);
     });
   });
 
@@ -81,11 +81,11 @@ describe('RHOAI Plugin Extensions', () => {
     it('should include all extensions in the correct order', () => {
       expect(extensions).toEqual([
         communityPluginsSectionExtension,
-        communityPluginsAdminAreaExtension,
-        communityPluginsAdminSectionExtension,
+        communityPluginsCatalogAreaExtension,
+        communityPluginsCatalogSectionExtension,
         catalogNavExtension,
         installedNavExtension,
-        communityPluginsAdminRouteExtension,
+        communityPluginsCatalogRouteExtension,
       ]);
     });
   });

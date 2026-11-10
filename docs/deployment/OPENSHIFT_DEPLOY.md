@@ -31,6 +31,25 @@ oc delete namespace community-plugins-admin
 
 Then proceed with a fresh install using the commands below.
 
+## Migrating from Pre-0.1.6 Installations (Plugin Rename)
+
+Version 0.1.6 renames the plugin from **Community Plugins Admin** to **Community Plugins Catalog**. Every identity reference changes: the plugin name, Module Federation scope, URL path prefix, image names, Helm chart name, and deployment resources. Existing installs keep running, but they will never see upgrades under the new identity — plan a maintenance window and do a clean reinstall:
+
+1. **Note your current values** — especially any `--set` overrides from the original install.
+2. **Uninstall the old release**: `helm uninstall community-plugins-admin -n cp-plugins-admin`
+3. **Remove leftover cluster-scoped resources**:
+
+    ```bash
+    oc delete clusterrole community-plugins-admin-bff
+    oc delete clusterrolebinding community-plugins-admin-bff
+    ```
+
+4. **Remove the namespace** if no other plugins are deployed there: `oc delete namespace cp-plugins-admin`
+5. **Re-register with the dashboard** — replace the old `communityPluginsAdmin` entry in `MODULE_FEDERATION_CONFIG` with the new `communityPluginsCatalog` entry (name, service names, and proxy path all change; see step 2 below).
+6. **Install fresh** using the new chart name `community-plugins-catalog-chart` and release name `community-plugins-catalog` in namespace `cp-plugins-catalog` (commands below).
+
+Users' bookmarks to `/community-plugins-admin/*` will 404 after the migration — the route prefix changes to `/community-plugins-catalog/*`.
+
 ---
 
 ## 1. Install the Plugin
@@ -38,24 +57,24 @@ Then proceed with a fresh install using the commands below.
 Install directly from the OCI registry — no need to clone the repo:
 
 ```bash
-helm install community-plugins-admin oci://quay.io/rh-ai-community-plugins/community-plugins-admin-chart \
-  --version 0.1.5 \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog oci://quay.io/rh-ai-community-plugins/community-plugins-catalog-chart \
+  --version 0.1.6 \
+  --namespace cp-plugins-catalog \
   --create-namespace
 ```
 
 Or, from a local checkout of the repository:
 
 ```bash
-helm install community-plugins-admin chart/ \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog chart/ \
+  --namespace cp-plugins-catalog \
   --create-namespace
 ```
 
 This creates:
 
-- A **Deployment** and **Service** (`community-plugins-admin`) serving the plugin's static assets (including `remoteEntry.js`) via Nginx on port 8080
-- A **BFF Deployment** and **Service** (`community-plugins-admin-bff`) running the plugin's backend service on port 3000 (enabled by default)
+- A **Deployment** and **Service** (`community-plugins-catalog`) serving the plugin's static assets (including `remoteEntry.js`) via Nginx on port 8080
+- A **BFF Deployment** and **Service** (`community-plugins-catalog-bff`) running the plugin's backend service on port 3000 (enabled by default)
 - A **ServiceAccount** for the BFF with a **ClusterRole** and **ClusterRoleBinding** granting permissions for plugin lifecycle operations (enabled by default)
 
 ### Overriding Defaults
@@ -63,9 +82,9 @@ This creates:
 Pass `--set` flags to customize the installation:
 
 ```bash
-helm install community-plugins-admin oci://quay.io/rh-ai-community-plugins/community-plugins-admin-chart \
-  --version 0.1.5 \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog oci://quay.io/rh-ai-community-plugins/community-plugins-catalog-chart \
+  --version 0.1.6 \
+  --namespace cp-plugins-catalog \
   --create-namespace \
   --set replicaCount=2
 ```
@@ -73,9 +92,9 @@ helm install community-plugins-admin oci://quay.io/rh-ai-community-plugins/commu
 To deploy the frontend only (no BFF):
 
 ```bash
-helm install community-plugins-admin oci://quay.io/rh-ai-community-plugins/community-plugins-admin-chart \
-  --version 0.1.5 \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog oci://quay.io/rh-ai-community-plugins/community-plugins-catalog-chart \
+  --version 0.1.6 \
+  --namespace cp-plugins-catalog \
   --create-namespace \
   --set bff.enabled=false
 ```
@@ -100,14 +119,14 @@ oc get configmap federation-config \
 import json, sys
 config = json.load(sys.stdin)
 config.append({
-  'name': 'communityPluginsAdmin',
+  'name': 'communityPluginsCatalog',
   'backend': {
     'remoteEntry': '/remoteEntry.js',
     'authorize': False,
     'tls': False,
     'service': {
-      'name': 'community-plugins-admin',
-      'namespace': 'cp-plugins-admin',
+      'name': 'community-plugins-catalog',
+      'namespace': 'cp-plugins-catalog',
       'port': 8080
     }
   }
@@ -132,25 +151,25 @@ oc get configmap federation-config \
 import json, sys
 config = json.load(sys.stdin)
 config.append({
-  'name': 'communityPluginsAdmin',
+  'name': 'communityPluginsCatalog',
   'backend': {
     'remoteEntry': '/remoteEntry.js',
     'authorize': False,
     'tls': False,
     'service': {
-      'name': 'community-plugins-admin',
-      'namespace': 'cp-plugins-admin',
+      'name': 'community-plugins-catalog',
+      'namespace': 'cp-plugins-catalog',
       'port': 8080
     }
   },
   'proxyService': [{
-    'path': '/community-plugins-admin/api',
+    'path': '/community-plugins-catalog/api',
     'pathRewrite': '/api',
     'authorize': True,
     'tls': False,
     'service': {
-      'name': 'community-plugins-admin-bff',
-      'namespace': 'cp-plugins-admin',
+      'name': 'community-plugins-catalog-bff',
+      'namespace': 'cp-plugins-catalog',
       'port': 3000
     }
   }]
@@ -163,7 +182,7 @@ oc set env deployment/rhods-dashboard \
   "MODULE_FEDERATION_CONFIG=$(cat /tmp/mf-config-extended.json)"
 ```
 
-The `proxyService` entry tells the dashboard to forward requests from `/community-plugins-admin/api/*` to the BFF service, rewriting the path to `/api/*` and forwarding the user's Bearer token (`authorize: true`).
+The `proxyService` entry tells the dashboard to forward requests from `/community-plugins-catalog/api/*` to the BFF service, rewriting the path to `/api/*` and forwarding the user's Bearer token (`authorize: true`).
 
 ### Why `MODULE_FEDERATION_CONFIG` Instead of the ConfigMap?
 
@@ -197,17 +216,17 @@ for entry in data:
 Verify the plugin pods are running:
 
 ```bash
-oc get pods -n cp-plugins-admin
+oc get pods -n cp-plugins-catalog
 ```
 
-You should see pods for `community-plugins-admin` (and `community-plugins-admin-bff` if BFF is enabled), all in `Running` status.
+You should see pods for `community-plugins-catalog` (and `community-plugins-catalog-bff` if BFF is enabled), all in `Running` status.
 
 ### Check RBAC
 
 Verify the BFF's RBAC resources were created:
 
 ```bash
-oc get clusterrole,clusterrolebinding -l app.kubernetes.io/instance=community-plugins-admin
+oc get clusterrole,clusterrolebinding -l app.kubernetes.io/instance=community-plugins-catalog
 ```
 
 ### Check the dashboard
@@ -236,8 +255,8 @@ The Helm chart provisions a ClusterRole and ClusterRoleBinding for the BFF's Ser
 If you manage RBAC separately or use a pre-existing ServiceAccount, disable the chart's RBAC resources:
 
 ```bash
-helm install community-plugins-admin chart/ \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog chart/ \
+  --namespace cp-plugins-catalog \
   --create-namespace \
   --set bff.rbac.create=false
 ```
@@ -247,8 +266,8 @@ helm install community-plugins-admin chart/ \
 To use a ServiceAccount that already exists in the cluster:
 
 ```bash
-helm install community-plugins-admin chart/ \
-  --namespace cp-plugins-admin \
+helm install community-plugins-catalog chart/ \
+  --namespace cp-plugins-catalog \
   --create-namespace \
   --set bff.serviceAccount.create=false \
   --set bff.serviceAccount.name=my-existing-sa \
@@ -261,7 +280,7 @@ helm install community-plugins-admin chart/ \
 
 ### 1. Remove from the dashboard federation config
 
-Retrieve the current config, remove the `communityPluginsAdmin` entry, and re-apply:
+Retrieve the current config, remove the `communityPluginsCatalog` entry, and re-apply:
 
 ```bash
 oc get configmap federation-config \
@@ -270,7 +289,7 @@ oc get configmap federation-config \
 | python3 -c "
 import json, sys
 config = json.load(sys.stdin)
-config = [e for e in config if e.get('name') != 'communityPluginsAdmin']
+config = [e for e in config if e.get('name') != 'communityPluginsCatalog']
 print(json.dumps(config))
 " > /tmp/mf-config-reduced.json
 
@@ -282,8 +301,8 @@ oc set env deployment/rhods-dashboard \
 ### 2. Uninstall the Helm release
 
 ```bash
-helm uninstall community-plugins-admin -n cp-plugins-admin
-oc delete namespace cp-plugins-admin   # optional: remove the namespace entirely
+helm uninstall community-plugins-catalog -n cp-plugins-catalog
+oc delete namespace cp-plugins-catalog   # optional: remove the namespace entirely
 ```
 
 ---
@@ -294,9 +313,9 @@ Key values in `chart/values.yaml`:
 
 | Parameter | Default | Description |
 |---|---|---|
-| `nameOverride` | `"community-plugins-admin"` | Override `.Chart.Name` for resource naming |
+| `nameOverride` | `"community-plugins-catalog"` | Override `.Chart.Name` for resource naming |
 | `fullnameOverride` | `""` | Override fully qualified resource names |
-| `image.repository` | `quay.io/rh-ai-community-plugins/community-plugins-admin` | Frontend container image |
+| `image.repository` | `quay.io/rh-ai-community-plugins/community-plugins-catalog` | Frontend container image |
 | `image.tag` | `""` (defaults to appVersion) | Frontend image tag |
 | `image.pullPolicy` | `IfNotPresent` | Image pull policy |
 | `replicaCount` | `1` | Frontend replicas |
@@ -315,7 +334,7 @@ Key values in `chart/values.yaml`:
 | `tolerations` | `[]` | Tolerations for pod scheduling |
 | `affinity` | `{}` | Affinity rules for pod scheduling |
 | `bff.enabled` | `true` | Deploy the BFF service |
-| `bff.image.repository` | `quay.io/rh-ai-community-plugins/community-plugins-admin-bff` | BFF container image |
+| `bff.image.repository` | `quay.io/rh-ai-community-plugins/community-plugins-catalog-bff` | BFF container image |
 | `bff.image.tag` | `""` (defaults to appVersion) | BFF image tag |
 | `bff.replicaCount` | `1` | BFF replicas |
 | `bff.service.port` | `3000` | BFF Service port |

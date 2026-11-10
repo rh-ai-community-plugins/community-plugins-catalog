@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "community-plugins-admin.fullname" . }}
-  namespace: {{ include "community-plugins-admin.namespace" . }}
+  name: {{ include "community-plugins-catalog.fullname" . }}
+  namespace: {{ include "community-plugins-catalog.namespace" . }}
   labels:
-    {{- include "community-plugins-admin.labels" . | nindent 4 }}
+    {{- include "community-plugins-catalog.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,5 +13,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "community-plugins-admin.selectorLabels" . | nindent 4 }}
+    {{- include "community-plugins-catalog.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: frontend

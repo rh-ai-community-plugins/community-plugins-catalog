@@ -42,7 +42,7 @@ A Helm chart in the `chart/` directory that deploys the plugin's Kubernetes reso
 - **OCI registry**: `oci://{registry}/{plugin}-chart` (e.g. `oci://quay.io/rh-ai-community-plugins/my-cool-plugin-chart`)
 - The chart must use `nameOverride` in `values.yaml` so that deployed Kubernetes resources use the plugin name (without the `-chart` suffix)
 - The chart version is kept in sync with the project version via `scripts/sync-chart-version.js`
-- **Automatic deployment**: If you want the plugin to be automatically deployed by an external mechanism (such as the community-plugins admin plugin), the Helm chart **must** be packaged and published as an OCI artifact to the registry. The admin plugin pulls the chart from the OCI URL declared in `plugin.yaml` to install the plugin on the cluster. Without a published OCI chart, only manual `helm install chart/` from a local checkout is possible.
+- **Automatic deployment**: If you want the plugin to be automatically deployed by an external mechanism (such as the Community Plugins Catalog plugin), the Helm chart **must** be packaged and published as an OCI artifact to the registry. The catalog plugin pulls the chart from the OCI URL declared in `plugin.yaml` to install the plugin on the cluster. Without a published OCI chart, only manual `helm install chart/` from a local checkout is possible.
 
 Package and push with:
 
@@ -62,7 +62,7 @@ helm push {plugin}-chart-{version}.tgz oci://{registry}
 A manifest file at the repository root that serves as the single source of truth for the plugin's identity, compatibility, deployment model, and integration details. This file is consumed by:
 
 - The **community plugin catalog/registry** (charter) to discover and list available plugins
-- The **community-plugins admin plugin** to know how to install the plugin (Helm chart OCI URL, prerequisites, RBAC requirements)
+- The **Community Plugins Catalog plugin** to know how to install the plugin (Helm chart OCI URL, prerequisites, RBAC requirements)
 - **Developers** as a reference for all plugin-specific identifiers
 
 Key fields:
@@ -164,37 +164,37 @@ All route prefixes, hrefs, and path patterns in `extensions.ts` must use the sam
 
 | File | Identifier | Current value | Replace with |
 |---|---|---|---|
-| `package.json` | `name` | `community-plugins-admin` | `{your-plugin}` |
-| `package.json` | `module-federation.name` | `communityPluginsAdmin` | `{yourPlugin}` (camelCase) |
-| `package.json` | `module-federation.proxy[].path` | `/community-plugins-admin` | `/{your-plugin}` |
-| `package.json` | `module-federation.proxy[].pathRewrite` | `/community-plugins-admin` | `/{your-plugin}` |
+| `package.json` | `name` | `community-plugins-catalog` | `{your-plugin}` |
+| `package.json` | `module-federation.name` | `communityPluginsCatalog` | `{yourPlugin}` (camelCase) |
+| `package.json` | `module-federation.proxy[].path` | `/community-plugins-catalog` | `/{your-plugin}` |
+| `package.json` | `module-federation.proxy[].pathRewrite` | `/community-plugins-catalog` | `/{your-plugin}` |
 | `package.json` | `module-federation.local.port` | `9500` | Any unused port (see [Port allocation](#port-allocation)) |
-| `plugin.yaml` | `name` | `community-plugins-admin` | `{your-plugin}` |
-| `plugin.yaml` | `displayName` | `Community Plugins Admin` | Your plugin name |
-| `plugin.yaml` | `image.repository` | `quay.io/.../community-plugins-admin` | Your image repository |
-| `plugin.yaml` | `install.helm.registry` | `oci://quay.io/.../community-plugins-admin` | Your OCI chart registry |
-| `plugin.yaml` | `remote.spec.name` | `communityPluginsAdmin` | `{yourPlugin}` (camelCase) |
-| `plugin.yaml` | `remote.spec.scope` | `communityPluginsAdmin` | `{yourPlugin}` (must match `name`) |
-| `plugin.yaml` | `remote.spec.remoteEntry` | `.../community-plugins-admin/...` | Your deployed image URL |
-| `plugin.yaml` | `remote.spec.paths[0].path` | `/community-plugins-admin` | `/{your-plugin}` |
-| `plugin.yaml` | `remote.spec.paths[0].extensions` | `communityPluginsAdmin/extensions` | `{yourPlugin}/extensions` |
-| `plugin.yaml` | `remote.spec.paths[1].path` | `communityPluginsAdmin/Icon` | `{yourPlugin}/Icon` |
-| `src/rhoai/extensions.ts` | area `id` | `community-plugins-admin` | `{your-plugin}` |
-| `src/rhoai/extensions.ts` | plugin section `id` | `community-plugins-admin` | `{your-plugin}` |
-| `src/rhoai/extensions.ts` | plugin section `title` | `Community Plugins Admin` | Your plugin name |
-| `src/rhoai/extensions.ts` | plugin section `group` | `1_community_plugins_admin` | `{N}_{your_plugin}` |
-| `src/rhoai/extensions.ts` | nav item `id`s | `community-plugins-admin-*` | `{your-plugin}-{page}` |
-| `src/rhoai/extensions.ts` | nav item `href`/`path` | `/community-plugins-admin/*` | `/{your-plugin}/*` |
-| `src/rhoai/extensions.ts` | route `path` | `/community-plugins-admin/*` | `/{your-plugin}/*` |
-| `src/bootstrap.tsx` | `Router basename` | `/community-plugins-admin` | `/{your-plugin}` |
-| `config/webpack.common.js` | MF plugin `name` | `communityPluginsAdmin` | `{yourPlugin}` (camelCase) |
-| `config/moduleFederation.js` | `name` | `communityPluginsAdmin` | `{yourPlugin}` (camelCase) |
-| `config/webpack.dev.js` | proxy `context` | `/community-plugins-admin` | `/{your-plugin}` |
+| `plugin.yaml` | `name` | `community-plugins-catalog` | `{your-plugin}` |
+| `plugin.yaml` | `displayName` | `Community Plugins Catalog` | Your plugin name |
+| `plugin.yaml` | `image.repository` | `quay.io/.../community-plugins-catalog` | Your image repository |
+| `plugin.yaml` | `install.helm.registry` | `oci://quay.io/.../community-plugins-catalog` | Your OCI chart registry |
+| `plugin.yaml` | `remote.spec.name` | `communityPluginsCatalog` | `{yourPlugin}` (camelCase) |
+| `plugin.yaml` | `remote.spec.scope` | `communityPluginsCatalog` | `{yourPlugin}` (must match `name`) |
+| `plugin.yaml` | `remote.spec.remoteEntry` | `.../community-plugins-catalog/...` | Your deployed image URL |
+| `plugin.yaml` | `remote.spec.paths[0].path` | `/community-plugins-catalog` | `/{your-plugin}` |
+| `plugin.yaml` | `remote.spec.paths[0].extensions` | `communityPluginsCatalog/extensions` | `{yourPlugin}/extensions` |
+| `plugin.yaml` | `remote.spec.paths[1].path` | `communityPluginsCatalog/Icon` | `{yourPlugin}/Icon` |
+| `src/rhoai/extensions.ts` | area `id` | `community-plugins-catalog` | `{your-plugin}` |
+| `src/rhoai/extensions.ts` | plugin section `id` | `community-plugins-catalog` | `{your-plugin}` |
+| `src/rhoai/extensions.ts` | plugin section `title` | `Community Plugins Catalog` | Your plugin name |
+| `src/rhoai/extensions.ts` | plugin section `group` | `1_community_plugins_catalog` | `{N}_{your_plugin}` |
+| `src/rhoai/extensions.ts` | nav item `id`s | `community-plugins-catalog-*` | `{your-plugin}-{page}` |
+| `src/rhoai/extensions.ts` | nav item `href`/`path` | `/community-plugins-catalog/*` | `/{your-plugin}/*` |
+| `src/rhoai/extensions.ts` | route `path` | `/community-plugins-catalog/*` | `/{your-plugin}/*` |
+| `src/bootstrap.tsx` | `Router basename` | `/community-plugins-catalog` | `/{your-plugin}` |
+| `config/webpack.common.js` | MF plugin `name` | `communityPluginsCatalog` | `{yourPlugin}` (camelCase) |
+| `config/moduleFederation.js` | `name` | `communityPluginsCatalog` | `{yourPlugin}` (camelCase) |
+| `config/webpack.dev.js` | proxy `context` | `/community-plugins-catalog` | `/{your-plugin}` |
 | `config/webpack.dev.js` | `port` | `9500` | Same as `package.json` port |
-| `.env.development` | `URL_PREFIX` | `/community-plugins-admin` | `/{your-plugin}` |
-| `chart/Chart.yaml` | `name` | `community-plugins-admin-chart` | `{your-plugin}-chart` |
-| `chart/values.yaml` | `image.repository` | `quay.io/.../community-plugins-admin` | Your image repository |
-| `chart/values.yaml` | `ingress.path` | `/community-plugins-admin` | `/{your-plugin}` |
+| `.env.development` | `URL_PREFIX` | `/community-plugins-catalog` | `/{your-plugin}` |
+| `chart/Chart.yaml` | `name` | `community-plugins-catalog-chart` | `{your-plugin}-chart` |
+| `chart/values.yaml` | `image.repository` | `quay.io/.../community-plugins-catalog` | Your image repository |
+| `chart/values.yaml` | `ingress.path` | `/community-plugins-catalog` | `/{your-plugin}` |
 
 ### Identifiers to keep (shared)
 

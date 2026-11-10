@@ -53,7 +53,7 @@ const deploymentWithConfigMap = (cmName: string, cmKey: string, resourceVersion?
 const deploymentWithInlineAndAnnotation = (configValue: string, cmRef: string, resourceVersion?: string) => ({
   metadata: {
     ...(resourceVersion !== undefined && { resourceVersion }),
-    annotations: { 'community-plugins-admin/configMapRef': cmRef },
+    annotations: { 'community-plugins-catalog/configMapRef': cmRef },
   },
   spec: {
     template: {
@@ -73,7 +73,7 @@ const deploymentWithInlineAndAnnotation = (configValue: string, cmRef: string, r
 });
 
 const sampleEntries = [
-  { name: 'communityPluginsAdmin', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'community-plugins-admin', namespace: 'community-plugins-admin', port: 8080 } } },
+  { name: 'communityPluginsCatalog', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'community-plugins-catalog', namespace: 'community-plugins-catalog', port: 8080 } } },
 ];
 
 const oldFormatEntries = [
@@ -82,7 +82,7 @@ const oldFormatEntries = [
 
 describe('scopeToKebab', () => {
   it('converts camelCase to kebab-case', () => {
-    expect(scopeToKebab('communityPluginsAdmin')).toBe('community-plugins-admin');
+    expect(scopeToKebab('communityPluginsCatalog')).toBe('community-plugins-catalog');
     expect(scopeToKebab('myPlugin')).toBe('my-plugin');
   });
 
@@ -97,7 +97,7 @@ describe('scopeToKebab', () => {
 
 describe('kebabToCamelScope', () => {
   it('converts kebab-case to camelCase', () => {
-    expect(kebabToCamelScope('community-plugins-admin')).toBe('communityPluginsAdmin');
+    expect(kebabToCamelScope('community-plugins-catalog')).toBe('communityPluginsCatalog');
     expect(kebabToCamelScope('my-plugin')).toBe('myPlugin');
   });
 
@@ -330,7 +330,7 @@ describe('addPluginToConfig', () => {
       body: deploymentWithConfig(JSON.stringify(sampleEntries)),
     });
 
-    const duplicate = { name: 'communityPluginsAdmin', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } };
+    const duplicate = { name: 'communityPluginsCatalog', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } };
     await expect(addPluginToConfig('test-token', duplicate)).rejects.toThrow('already in');
   });
 
@@ -411,7 +411,7 @@ describe('removePluginFromConfig', () => {
       body: deploymentWithConfig(JSON.stringify(sampleEntries)),
     });
 
-    await removePluginFromConfig('test-token', 'community-plugins-admin');
+    await removePluginFromConfig('test-token', 'community-plugins-catalog');
 
     const patchCall = mockK8sRequest.mock.calls.find((c) => c[0].method === 'PATCH');
     expect(patchCall).toBeDefined();
@@ -419,14 +419,14 @@ describe('removePluginFromConfig', () => {
 
   it('removes entry with PascalCase name by plugin name', async () => {
     const pascalEntries = [
-      { name: 'CommunityPluginsAdmin', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } },
+      { name: 'CommunityPluginsCatalog', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } },
     ];
     mockK8sRequest.mockResolvedValue({
       status: 200,
       body: deploymentWithConfig(JSON.stringify(pascalEntries)),
     });
 
-    await removePluginFromConfig('test-token', 'community-plugins-admin');
+    await removePluginFromConfig('test-token', 'community-plugins-catalog');
 
     const patchCall = mockK8sRequest.mock.calls.find((c) => c[0].method === 'PATCH');
     expect(patchCall).toBeDefined();
@@ -436,7 +436,7 @@ describe('removePluginFromConfig', () => {
 
   it('removes only the matching entry when multiple plugins are present', async () => {
     const multiEntries = [
-      { name: 'CommunityPluginsAdmin', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } },
+      { name: 'CommunityPluginsCatalog', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'cpa', namespace: 'cpa', port: 8080 } } },
       { name: 'anotherPlugin', backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'ap', namespace: 'ap', port: 8080 } } },
     ];
     mockK8sRequest.mockResolvedValue({
@@ -444,7 +444,7 @@ describe('removePluginFromConfig', () => {
       body: deploymentWithConfig(JSON.stringify(multiEntries)),
     });
 
-    await removePluginFromConfig('test-token', 'community-plugins-admin');
+    await removePluginFromConfig('test-token', 'community-plugins-catalog');
 
     const patchCall = mockK8sRequest.mock.calls.find((c) => c[0].method === 'PATCH');
     expect(patchCall).toBeDefined();
@@ -511,7 +511,7 @@ describe('removePluginFromConfig', () => {
     });
     mockK8sRequest.mockResolvedValueOnce({ status: 200, body: {} });
 
-    await expect(removePluginFromConfig('test-token', 'community-plugins-admin')).resolves.toBe(true);
+    await expect(removePluginFromConfig('test-token', 'community-plugins-catalog')).resolves.toBe(true);
     expect(mockK8sRequest).toHaveBeenCalledTimes(4);
   });
 
@@ -524,7 +524,7 @@ describe('removePluginFromConfig', () => {
       mockK8sRequest.mockResolvedValueOnce({ status: 409, body: {} });
     }
 
-    await expect(removePluginFromConfig('test-token', 'community-plugins-admin')).rejects.toThrow('409');
+    await expect(removePluginFromConfig('test-token', 'community-plugins-catalog')).rejects.toThrow('409');
     expect(mockK8sRequest).toHaveBeenCalledTimes(6);
   });
 });
