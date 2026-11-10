@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { LifecycleResponse, LifecycleStep, LifecycleOperation, LifecycleProgressEvent } from '~/app/types/lifecycle';
 
-const API_BASE = '/community-plugins-admin/api/plugins';
+const API_BASE = '/community-plugins-catalog/api/plugins';
 
 class StreamInterruptedError extends Error {
   constructor() {

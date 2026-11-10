@@ -2,9 +2,9 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "community-plugins-admin.fullname" . }}-bff
+  name: {{ include "community-plugins-catalog.fullname" . }}-bff
   labels:
-    {{- include "community-plugins-admin.labels" . | nindent 4 }}
+    {{- include "community-plugins-catalog.labels" . | nindent 4 }}
     app.kubernetes.io/component: bff
 rules:
   # Manage namespaces for plugin deployments

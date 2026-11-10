@@ -47,7 +47,7 @@ it('fetches plugin detail on mount', async () => {
   expect(result.current.plugin).toEqual(mockPlugin);
   expect(result.current.error).toBeNull();
   expect(global.fetch).toHaveBeenCalledWith(
-    '/community-plugins-admin/api/catalog/test-plugin',
+    '/community-plugins-catalog/api/catalog/test-plugin',
     expect.objectContaining({ signal: expect.any(AbortSignal) }),
   );
 });
@@ -157,7 +157,7 @@ it('encodes plugin name in URL', async () => {
   renderHook(() => usePluginDetail('plugin with spaces', emptyNames, false));
 
   expect(global.fetch).toHaveBeenCalledWith(
-    '/community-plugins-admin/api/catalog/plugin%20with%20spaces',
+    '/community-plugins-catalog/api/catalog/plugin%20with%20spaces',
     expect.any(Object),
   );
 });

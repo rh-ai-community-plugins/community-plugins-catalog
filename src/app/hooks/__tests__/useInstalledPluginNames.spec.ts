@@ -2,12 +2,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useInstalledPluginNames, scopeToKebab } from '../useInstalledPluginNames';
 
 const mockConfig = {
-  bffNamespace: 'cp-plugins-admin',
+  bffNamespace: 'cp-plugins-catalog',
   dashboardNamespace: 'redhat-ods-applications',
   dashboardDeployment: 'rhods-dashboard',
 };
 
-// Names are camelCase in MODULE_FEDERATION_CONFIG (e.g. communityPluginsAdmin),
+// Names are camelCase in MODULE_FEDERATION_CONFIG (e.g. communityPluginsCatalog),
 // matching the Module Federation container name in plugin.yaml.
 const mockDeployment = {
   spec: {
@@ -22,8 +22,8 @@ const mockDeployment = {
                 name: 'MODULE_FEDERATION_CONFIG',
                 value: JSON.stringify([
                   {
-                    name: 'communityPluginsAdmin',
-                    backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'community-plugins-admin', namespace: 'community-plugins-admin', port: 8080 } },
+                    name: 'communityPluginsCatalog',
+                    backend: { remoteEntry: '/remoteEntry.js', tls: false, service: { name: 'community-plugins-catalog', namespace: 'community-plugins-catalog', port: 8080 } },
                   },
                   {
                     name: 'brewet',
@@ -41,7 +41,7 @@ const mockDeployment = {
 
 describe('scopeToKebab', () => {
   it('converts camelCase scope to kebab-case', () => {
-    expect(scopeToKebab('communityPluginsAdmin')).toBe('community-plugins-admin');
+    expect(scopeToKebab('communityPluginsCatalog')).toBe('community-plugins-catalog');
     expect(scopeToKebab('myPlugin')).toBe('my-plugin');
     expect(scopeToKebab('fooBarBaz')).toBe('foo-bar-baz');
   });
@@ -68,10 +68,10 @@ describe('useInstalledPluginNames', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
-    // camelCase name "communityPluginsAdmin" → kebab "community-plugins-admin"
+    // camelCase name "communityPluginsCatalog" → kebab "community-plugins-catalog"
     // all-lowercase name "brewet" stays "brewet"
     expect(result.current.installedNames).toEqual(
-      new Set(['community-plugins-admin', 'brewet']),
+      new Set(['community-plugins-catalog', 'brewet']),
     );
     expect(result.current.error).toBeNull();
   });

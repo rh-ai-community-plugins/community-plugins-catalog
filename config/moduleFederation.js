@@ -5,11 +5,11 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env.development') });
 
 module.exports = {
-  name: 'communityPluginsAdmin', // [PLUGIN-SPECIFIC] must match package.json and plugin.yaml
+  name: 'communityPluginsCatalog', // [PLUGIN-SPECIFIC] must match package.json and plugin.yaml
   filename: 'remoteEntry.js',
   exposes: {
     './extensions': './src/rhoai/extensions.ts',
-    './Icon': './src/app/components/CommunityPluginsAdminNavIcon.tsx',
+    './Icon': './src/app/components/CommunityPluginsCatalogNavIcon.tsx',
   },
   optimization: {
     runtimeChunk: false,

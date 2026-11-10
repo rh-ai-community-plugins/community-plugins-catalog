@@ -25,7 +25,7 @@ export function useDashboardRollout(active: boolean): {
 
   const fetchStatus = useCallback(async (signal: AbortSignal) => {
     try {
-      const res = await fetch('/community-plugins-admin/api/dashboard/status', { signal });
+      const res = await fetch('/community-plugins-catalog/api/dashboard/status', { signal });
       if (!res.ok) {
         setConsecutiveErrors((c) => c + 1);
         return;

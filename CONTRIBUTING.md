@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for your interest in Community Plugins Admin — the plugin management interface for the Red Hat OpenShift AI Dashboard.
+Thank you for your interest in Community Plugins Catalog — the plugin management interface for the Red Hat OpenShift AI Dashboard.
 
 ## How to Contribute
 
@@ -16,7 +16,7 @@ Thank you for your interest in Community Plugins Admin — the plugin management
 
 ## Reporting Issues
 
-Please use [GitHub Issues](https://github.com/rh-ai-community-plugins/community-plugins-admin/issues) to report bugs or suggest improvements.
+Please use [GitHub Issues](https://github.com/rh-ai-community-plugins/community-plugins-catalog/issues) to report bugs or suggest improvements.
 
 ## License
 

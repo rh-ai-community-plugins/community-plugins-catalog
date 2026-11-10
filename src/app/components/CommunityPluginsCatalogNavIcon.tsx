@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CommunityPluginsAdminIcon: React.FC = () => (
+const CommunityPluginsCatalogIcon: React.FC = () => (
   <svg
     className="pf-v6-svg"
     viewBox="0 0 32 32"
@@ -25,4 +25,4 @@ const CommunityPluginsAdminIcon: React.FC = () => (
   </svg>
 );
 
-export default CommunityPluginsAdminIcon;
+export default CommunityPluginsCatalogIcon;

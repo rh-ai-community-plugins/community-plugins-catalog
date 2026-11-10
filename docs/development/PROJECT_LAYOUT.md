@@ -16,7 +16,7 @@ Directory structure of the plugin.
 │       ├── components/             #   Shared UI components
 │       │   ├── CommunityBanner.tsx  #     [SHARED] "Community Plugin" banner — do not modify
 │       │   ├── CommunityBanner.css  #     [SHARED] Banner styles — do not modify
-│       │   ├── CommunityPluginsAdminNavIcon.tsx  # Plugin's sidebar icon
+│       │   ├── CommunityPluginsCatalogNavIcon.tsx  # Plugin's sidebar icon
 │       │   ├── PluginDetailModal.tsx #    Plugin detail modal with metadata and lifecycle actions
 │       │   ├── ConfirmRemoveModal.tsx #   Confirmation dialog for plugin removal (name re-typing)
 │       │   ├── LifecycleProgressModal.tsx # Step-by-step progress for lifecycle operations

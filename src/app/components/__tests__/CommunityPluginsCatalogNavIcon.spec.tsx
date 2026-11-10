@@ -1,16 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CommunityPluginsAdminIcon from '../CommunityPluginsAdminNavIcon';
+import CommunityPluginsCatalogIcon from '../CommunityPluginsCatalogNavIcon';
 
-describe('CommunityPluginsAdminNavIcon (CommunityPluginsAdminIcon) Component', () => {
+describe('CommunityPluginsCatalogNavIcon (CommunityPluginsCatalogIcon) Component', () => {
   it('should render the SVG icon', () => {
-    const { container } = render(<CommunityPluginsAdminIcon />);
+    const { container } = render(<CommunityPluginsCatalogIcon />);
     const svg = container.querySelector('svg');
     expect(svg).toBeInTheDocument();
   });
 
   it('should use PatternFly SVG conventions', () => {
-    const { container } = render(<CommunityPluginsAdminIcon />);
+    const { container } = render(<CommunityPluginsCatalogIcon />);
     const svg = container.querySelector('svg');
     expect(svg).toHaveAttribute('width', '1em');
     expect(svg).toHaveAttribute('height', '1em');
@@ -21,21 +21,21 @@ describe('CommunityPluginsAdminNavIcon (CommunityPluginsAdminIcon) Component', (
   });
 
   it('should render the CP text', () => {
-    const { container } = render(<CommunityPluginsAdminIcon />);
+    const { container } = render(<CommunityPluginsCatalogIcon />);
     const textElement = container.querySelector('text');
     expect(textElement).toBeInTheDocument();
     expect(textElement?.textContent).toBe('CP');
   });
 
   it('should render the rectangle background with purple fill', () => {
-    const { container } = render(<CommunityPluginsAdminIcon />);
+    const { container } = render(<CommunityPluginsCatalogIcon />);
     const rect = container.querySelector('rect');
     expect(rect).toBeInTheDocument();
     expect(rect).toHaveAttribute('fill', '#7d1007');
   });
 
   it('should have white bold centered text', () => {
-    const { container } = render(<CommunityPluginsAdminIcon />);
+    const { container } = render(<CommunityPluginsCatalogIcon />);
     const text = container.querySelector('text');
     expect(text).toHaveAttribute('fill', 'white');
     expect(text).toHaveAttribute('font-weight', 'bold');

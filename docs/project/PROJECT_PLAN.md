@@ -1,10 +1,10 @@
-# Community Plugins Admin — Project Plan
+# Community Plugins Catalog — Project Plan
 
 ## Overview
 
 Build a community plugin for the RHOAI Dashboard that lets administrators discover, install, upgrade, remove, enable, and disable community plugins — directly from the dashboard UI. Non-admin users can browse the catalog and view installed plugins but cannot modify them.
 
-Community Plugins Admin is intended to be the **first plugin** installed on a dashboard. Once in place, it automates plugin lifecycle management so that admins no longer need to manually edit `MODULE_FEDERATION_CONFIG` or run Helm commands to manage plugins.
+Community Plugins Catalog is intended to be the **first plugin** installed on a dashboard. Once in place, it automates plugin lifecycle management so that admins no longer need to manually edit `MODULE_FEDERATION_CONFIG` or run Helm commands to manage plugins.
 
 ### Plugin Registry
 
@@ -72,9 +72,9 @@ Each page load would otherwise require the frontend to fetch `plugins.yaml` from
 ```text
 RHOAI Dashboard Sidebar
 └── Community Plugins (shared section)
-    └── Community Plugins Admin (plugin section)
-        ├── Catalog          → /community-plugins-admin/catalog
-        └── Installed        → /community-plugins-admin/installed
+    └── Community Plugins Catalog (plugin section)
+        ├── Catalog          → /community-plugins-catalog/catalog
+        └── Installed        → /community-plugins-catalog/installed
 ```
 
 Plugin details are displayed in a **modal** over the catalog or installed page, preserving parent page state (filters, scroll position, search query).
@@ -98,8 +98,8 @@ Plugin details are displayed in a **modal** over the catalog or installed page, 
 
 2. **Update extensions.ts**
    - Replace three `app.navigation/href` extensions (UserInfo, ClusterResources, NamespaceSummary) with:
-     - `app.navigation/href` for "Catalog" (`/community-plugins-admin/catalog`)
-     - `app.navigation/href` for "Installed" (`/community-plugins-admin/installed`)
+     - `app.navigation/href` for "Catalog" (`/community-plugins-catalog/catalog`)
+     - `app.navigation/href` for "Installed" (`/community-plugins-catalog/installed`)
 
 3. **Update App.tsx routing**
    - New routes: `catalog`, `installed`
@@ -168,7 +168,7 @@ Plugin details are displayed in a **modal** over the catalog or installed page, 
 **Deliverables**:
 
 1. **Catalog data hook** (`src/app/hooks/useCatalog.ts`)
-   - Fetches from BFF `GET /community-plugins-admin/api/catalog`
+   - Fetches from BFF `GET /community-plugins-catalog/api/catalog`
    - Returns plugin list with loading/error states
    - Auto-refresh on mount
 
@@ -236,7 +236,7 @@ Plugin details are displayed in a **modal** over the catalog or installed page, 
 **Deliverables**:
 
 1. **Plugin detail hook** (`src/app/hooks/usePluginDetail.ts`)
-   - Fetches from BFF `GET /community-plugins-admin/api/catalog/:name`
+   - Fetches from BFF `GET /community-plugins-catalog/api/catalog/:name`
    - Resolves installed state from cluster
    - Returns full metadata + install status
 
@@ -329,7 +329,7 @@ Plugin details are displayed in a **modal** over the catalog or installed page, 
 
 ### Phase 7: Helm Chart & Deployment Updates ✓
 
-**Goal**: Update the Helm chart and CI/CD for the admin plugin's own deployment and RBAC needs.
+**Goal**: Update the Helm chart and CI/CD for the plugin's own deployment and RBAC needs.
 
 **Deliverables**:
 
@@ -439,9 +439,9 @@ Phase 2 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8
 
 ### Open
 
-1. **Plugin version resolution**: When a plugin's `plugin.yaml` declares compatibility with specific RHOAI versions, should the admin plugin enforce this and prevent installing incompatible plugins?
+1. **Plugin version resolution**: When a plugin's `plugin.yaml` declares compatibility with specific RHOAI versions, should the catalog plugin enforce this and prevent installing incompatible plugins?
 
-2. **Self-management**: Can this plugin manage (upgrade/remove) itself? This creates a bootstrapping problem — removing the admin plugin removes the ability to reinstall it without manual `MODULE_FEDERATION_CONFIG` editing.
+2. **Self-management**: Can this plugin manage (upgrade/remove) itself? This creates a bootstrapping problem — removing the catalog plugin removes the ability to reinstall it without manual `MODULE_FEDERATION_CONFIG` editing.
 
 3. **Offline / air-gapped clusters**: The BFF fetches metadata from GitHub. How should the plugin behave in disconnected environments? Should it support a local/mirrored registry?
 
